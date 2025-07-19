@@ -1,7 +1,7 @@
 # isell-Real-estate
 
 # 🏠 iSell Real Estate Platform
-iSell is a Django-based web application that allows property sellers to list properties and buyers to view, book, and favorite properties. It includes user authentication, dashboards, property management, and visit booking functionality.
+iSell is a comprehensive Django-based web application that enables seamless interaction between property sellers and potential buyers. The platform provides a user-friendly interface for listing, browsing, booking, and managing properties. It simulates the functionality of modern real estate portals and is built with full role-based access control.
 
 ## 🔧 Features
 
