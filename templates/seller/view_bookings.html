@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Bookings</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f7f7f7;
+            padding: 40px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        form {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        select {
+            padding: 8px 12px;
+            font-size: 14px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        th, td {
+            padding: 14px 16px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .status {
+            padding: 4px 10px;
+            border-radius: 6px;
+            color: white;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 6px;
+        }
+
+        .status.pending { background-color: #ffc107; }
+        .status.completed { background-color: #28a745; }
+        .status.cancelled { background-color: #dc3545; }
+
+        .delete-btn, .complete-btn {
+            display: inline-block;
+            padding: 4px 10px;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        .delete-btn {
+            background-color: #dc3545;
+        }
+
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
+
+        .complete-btn {
+            background-color: #28a745;
+        }
+
+        .complete-btn:hover {
+            background-color: #218838;
+        }
+
+        .messages {
+            text-align: center;
+            margin-bottom: 20px;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Your Property Bookings</h1>
+
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <form method="get">
+        <label for="sort">Sort by:</label>
+        <select name="sort" onchange="this.form.submit()">
+            <option value="-visit_date" {% if sort_by == '-visit_date' %}selected{% endif %}>Newest Visit First</option>
+            <option value="visit_date" {% if sort_by == 'visit_date' %}selected{% endif %}>Oldest Visit First</option>
+            <option value="status" {% if sort_by == 'status' %}selected{% endif %}>Status A-Z</option>
+            <option value="-status" {% if sort_by == '-status' %}selected{% endif %}>Status Z-A</option>
+            <option value="status_custom" {% if sort_by == 'status_custom' %}selected{% endif %}>Status (Completed Last)</option>
+        </select>
+    </form>
+
+    {% if bookings %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Property</th>
+                    <th>Buyer</th>
+                    <th>Visit Date</th>
+                    <th>Time</th>
+                    <th>Contact</th>
+                    <th>Status & Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in bookings %}
+                <tr>
+                    <td>{{ booking.property.title }}</td>
+                    <td>{{ booking.buyer.username }}</td>
+                    <td>{{ booking.visit_date }}</td>
+                    <td>{{ booking.visit_time }}</td>
+                    <td>
+                        {{ booking.email }}<br>
+                        {{ booking.contact_number }}
+                    </td>
+                    <td>
+                        <span class="status {{ booking.status }}">{{ booking.status|title }}</span><br>
+
+                        {% if booking.status != 'completed' %}
+                            <a href="{% url 'seller:complete_booking' booking.id %}"
+                               onclick="return confirm('Mark this booking as completed?')"
+                               class="complete-btn">Mark as Completed</a><br>
+                        {% endif %}
+
+                        <a href="{% url 'seller:delete_booking' booking.id %}"
+                           onclick="return confirm('Are you sure you want to delete this booking?')"
+                           class="delete-btn">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No bookings yet.</p>
+    {% endif %}
+
+    <div style="text-align:center;">
+        <a href="{% url 'seller:dashboard' %}" class="btn">Return to Dashboard</a>
+    </div>
+</div>
+</body>
+</html>

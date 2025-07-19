@@ -1,0 +1,221 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Seller Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #fceabb, #f8b500, #ec6f66, #fcb045);
+            background-size: 400% 400%;
+            animation: bgMove 10s ease infinite;
+            color: #333;
+            min-height: 100vh;
+        }
+
+        @keyframes bgMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+            color: #fff;
+        }
+
+        .left-section {
+            flex: 1;
+        }
+
+        .left-section h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+
+        .right-section {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .button {
+            background-color: #673ab7;
+            color: white;
+            padding: 10px 18px;
+            text-decoration: none;
+            border-radius: 10px;
+            transition: background 0.3s ease;
+            font-weight: 600;
+        }
+
+        .button:hover {
+            background-color: #512da8;
+        }
+
+        .button.red {
+            background-color: #e53935;
+        }
+
+        .button.red:hover {
+            background-color: #c62828;
+        }
+
+        .profile-box {
+            background: #fff8e1;
+            border: 2px solid #ffcc80;
+            border-radius: 12px;
+            padding: 12px 16px;
+            width: 260px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            font-size: 14px;
+            color: #333;
+        }
+
+        .profile-box p {
+            margin-bottom: 6px;
+        }
+
+        h2 {
+            color: #4e342e;
+            margin-bottom: 15px;
+        }
+
+        .properties {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+        }
+
+        .property-card {
+            background: #fff3e0;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+        }
+
+        .property-card h3 {
+            margin-top: 0;
+            color: #bf360c;
+        }
+
+        .property-card p {
+            margin: 6px 0;
+        }
+
+        .property-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+
+        .actions {
+            margin-top: 15px;
+        }
+
+        .actions a {
+            margin-right: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
+
+            .right-section {
+                align-items: flex-start;
+            }
+
+            .profile-box {
+                width: 100%;
+            }
+
+            .buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .button {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="left-section">
+                <h1>Hey {{ request.user.username }} 👋</h1>
+            </div>
+            <div class="right-section">
+                <div class="buttons">
+                    <a href="{% url 'seller:add_property' %}" class="button">➕ Add Property</a>
+                    <a href="{% url 'seller:logout' %}" class="button red">🚪 Logout</a>
+                    <a href="{% url 'seller:view_bookings' %}" class="button">View Bookings</a>
+                </div>
+                <div class="profile-box">
+                    <p><strong>Username:</strong> {{ request.user.username }}</p>
+                    <p><strong>Email:</strong> {{ request.user.email }}</p>
+                    <p><strong>Full Name:</strong> {{ request.user.profile.full_name|default:request.user.first_name }}</p>
+                    <p><strong>Address:</strong> {{ request.user.profile.address|default:'Not added' }}</p>
+                    <p><strong>Total Properties:</strong> {{ property_count }}</p>
+                </div>
+            </div>
+        </div>
+
+        <h2>Your Properties</h2>
+        {% if properties %}
+            <div class="properties">
+                {% for property in properties %}
+                    <div class="property-card">
+                        <h3>{{ property.title }}</h3>
+                        <p><strong>Price:</strong> ₹{{ property.price }}</p>
+                        <p><strong>Location:</strong> {{ property.location }}</p>
+                        <p>{{ property.description|truncatechars:100 }}</p>
+
+                        {% if property.image %}
+                            <img src="{{ property.image.url }}" alt="Property Image" class="property-image">
+                        {% endif %}
+
+                        <div class="actions">
+                            <a href="{% url 'seller:edit_property' property.id %}" class="button">Edit</a>
+                            <a href="{% url 'seller:delete_property' property.id %}" class="button orange">Delete</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No properties yet. Click "Add Property" to get started.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

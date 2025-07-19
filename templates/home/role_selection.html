@@ -1,0 +1,168 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Select Your Role | iSell</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #fceabb, #f8b500, #ec6f66, #fcb045);
+            background-size: 400% 400%;
+            animation: bgMove 10s ease infinite;
+        }
+
+        @keyframes bgMove {
+            0% {background-position: 0% 50%;}
+            50% {background-position: 100% 50%;}
+            100% {background-position: 0% 50%;}
+        }
+
+        .wrapper {
+            display: flex;
+            height: 100vh;
+            width: 100%;
+            padding: 20px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .left, .right {
+            flex: 1;
+            padding: 40px;
+            color: #333;
+        }
+
+        .left {
+            animation: slideInLeft 1.2s ease;
+        }
+
+        .left h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            color: #bf360c;
+        }
+
+        .left p {
+            font-size: 1.2em;
+            line-height: 1.7;
+            max-width: 600px;
+        }
+
+        .right {
+            background: linear-gradient(135deg, #ffffff, #ffe082);
+            border-radius: 20px;
+            max-width: 400px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            animation: fadeInUp 1.5s ease;
+            color: #4e342e;
+        }
+
+        .right h2 {
+            color: #bf360c;
+            margin-bottom: 20px;
+            margin-top: 30px;
+        }
+
+        form {
+            padding: 0 40px 40px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            margin-top: 15px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+
+        .btn.buyer {
+            background-color: #8bc34a;
+            color: #ffffff;
+        }
+
+        .btn.buyer:hover {
+            background-color: #689f38;
+        }
+
+        .btn.seller {
+            background-color: #ff7043;
+            color: #ffffff;
+        }
+
+        .btn.seller:hover {
+            background-color: #e64a19;
+        }
+
+        .note {
+            font-size: 14px;
+            color: #5d4037;
+            margin-top: 10px;
+        }
+
+        @keyframes slideInLeft {
+            from {transform: translateX(-50px); opacity: 0;}
+            to {transform: translateX(0); opacity: 1;}
+        }
+
+        @keyframes fadeInUp {
+            from {transform: translateY(40px); opacity: 0;}
+            to {transform: translateY(0); opacity: 1;}
+        }
+
+        @media (max-width: 768px) {
+            .wrapper {
+                flex-direction: column;
+                padding: 10px;
+            }
+
+            .left, .right {
+                width: 100%;
+                padding: 20px;
+            }
+
+            .left h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+    <div class="left">
+        <h1>Real Estate. Real Easy. 🔥</h1>
+        <p>
+            <strong>Welcome to <strong>iSell</strong></strong> —
+            the real estate platform where <strong>verified sellers</strong> and <strong>real buyers</strong> match up, fast and smooth.
+        </p>
+        <p style="margin-top: 20px;">
+            Whether you're ready to <strong>list your place</strong> or <strong>snag that dream spot</strong>,
+            iSell makes it effortless with clean vibes and zero confusion.
+        </p>
+    </div>
+
+    <div class="right">
+        <h2>What's Your Vibe?</h2>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" name="role" value="buyer" class="btn buyer">I'm a Buyer 🏡</button>
+            <button type="submit" name="role" value="seller" class="btn seller">I'm a Seller 💼</button>
+        </form>
+        <p class="note">Pick a side and let's roll</p>
+    </div>
+</div>
+</body>
+</html>
