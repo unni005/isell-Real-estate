@@ -30,12 +30,12 @@ iSell is a comprehensive Django-based web application that enables seamless inte
 - REST API
 
 ## steps to follow
-1.cd path
-2.python manage.py makemigrations
-3.python manage.py migrate
-4.python manage.py runserver
+- cd path
+- python manage.py makemigrations
+- python manage.py migrate
+- python manage.py runserver
 
 ## for api
-api/seller/properties(seller)
-api/buyer/bookings(buyer)
+- api/seller/properties(seller)
+- api/buyer/bookings(buyer)
 
